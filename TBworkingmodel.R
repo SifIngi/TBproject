@@ -22,7 +22,7 @@ model = function (current_timepoint, state_values, parameters)
   Infg = state_values [11]
   InfgR = state_values [12]
   Granuloma = state_values [13]
-  Tnfa = state_values [14]
+  TNFa = state_values [14]
   Dendrocyt = state_values [15]
   IL23 = state_values [16]
   Th17 = state_values [17]
@@ -33,26 +33,8 @@ model = function (current_timepoint, state_values, parameters)
   with ( 
     as.list (parameters),     # variable names within parameters can be used 
     {
-      dVaccine = - Vaccine*Kv_m - Vaccine*Kv_d #+*Kgv_v  # Unit for vaccinen er mikrogram/mL, mikrogram/mL/dage,  Kvaccine = mikrogram/mL/dage
-      dMakrofag = Vaccine*Kv_m - Makrofag*Km_f + Infg*Kinfgr_m + Tnfa*Ktnfa_m
-      dFagosom = Makrofag*Km_f - Fagosom*Kf_fl 
-      dFagolysosom = Fagosom*Kf_fl - Fagolysosom*Kfl_il12 - Fagolysosom*Kfl_p
-      dPeptider = Fagolysosom*Kfl_p - Peptider*Kp_mhc2
-      dMHC2 = Peptider*Kp_mhc2 - MHC2*Kmhc2_th0
-      dIL12 = Fagolysosom*Kfl_il12 + InfgR*Kil12_infgr - IL12*Kil12_th0
-      dTh0 = MHC2*Kmhc2_th0 + IL12*Kil12_th0 - Th0*Kth0_th1 - Th0*Kth0_il2 + IL23*Kil23_th0 - Th0*Kth0_th17 - Th0*Kth0_infg
-      dTh1 = Th0*Kth0_th1 - Th1*Kth1_infg
-      dIl2 = Th0*Kth0_il2 - Il2*Kil2_infg
-      dInfg = Th1*Kth1_infg + Il2*Kil2_infg + Th17*Kth17_infg + Th0*Kth0_infg - Infg*Kinfg_infgr - Infg*Kinfg_g
-      dInfgR = Infg*Kinfg_infgr - IL12*Kil12_infgr - InfgR*Kinfgr_m - InfgR*KinfgR_tnfa
-      dGranuloma = Infg*Kinfg_g + Tnfa*Ktnfa_g
-      dTnfa = InfgR*KinfgR_tnfa - Tnfa*Ktnfa_g - Tnfa*Ktnfa_m
-      dDendrocyt = Vaccine*Kv_d - Dendrocyt*Kd_il23
-      dIL23 = Dendrocyt*Kd_il23 - IL23*Kil23_th0
-      dTh17 = Th0*Kth0_th17 - Th17*Kth17_infg - Th17*Kth17_il17
-      dIL17 = Th17*Kth17_il17 - IL17*Kil17_gcf
-      dGranulopoeticChemicalFactors = IL17*Kil17_gcf - GranulopoeticChemicalFactors*Kgcf_gk
-      dGranulotcytKnoglemarv = GranulopoeticChemicalFactors*Kgcf_gk # - dGranulotcytKnoglemarv*Kgk_v
+      dVaccine = - Vaccine*Kv_m - Vaccine*Kv_d - Vaccine*Kv_gk
+      dMakrofag = Vaccine*Kv_m + TNFa*
       
       
       # combine results
@@ -119,7 +101,7 @@ IL20 = 0
 Infg0 = 0
 InfgR0 = 0
 Granuloma0 = 0
-Tnfa0 = 0
+TNFa0 = 0
 Dendrocyt0 = 0
 IL230 = 0
 Th170 = 0
@@ -129,7 +111,7 @@ GranulotcytKnoglemarv0 = 0
 
 initial.values <- c(Vaccine = Vaccine0, Makrofag = Makrofag0, Fagosom = Fagosom0, Fagolysosom = Fagolysosom0, Peptider = Peptider0, 
                     MHC2 = MHC20, IL12 = IL120, Th0 = Th00, Th1 = Th10, IL2 = IL20, Infg = Infg0, 
-                    InfgR = InfgR0, Granuloma = Granuloma0, Tnfa = Tnfa0, Dendrocyt = Dendrocyt0, 
+                    InfgR = InfgR0, Granuloma = Granuloma0, TNFa = TNFa0, Dendrocyt = Dendrocyt0, 
                     IL23 = IL230, Th17 = Th170, IL17 = IL170, 
                     GranulopoeticChemicalFactors = GranulopoeticChemicalFactors0, GranulotcytKnoglemarv = GranulotcytKnoglemarv0)
 
