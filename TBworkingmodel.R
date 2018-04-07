@@ -34,7 +34,7 @@ model = function (current_timepoint, state_values, parameters)
     as.list (parameters),     # variable names within parameters can be used 
     {
       dVaccine = - Vaccine*Kv_m - Vaccine*Kv_d - Vaccine*Kv_gk
-      dMakrofag = Vaccine*Kv_m + TNFa*
+      dMakrofag = Vaccine*Kv_m + TNFa*BLAAAA
       
       
       # combine results
