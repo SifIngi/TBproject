@@ -48,7 +48,6 @@ model = function (current_timepoint, state_values, parameters)
       dTh17 = Th0*Kth0_th17 - sigma_th17
       dIL17 = Th17*Kth17_il17 - sigma_il17
       dGranulocytKnoglemarv = Vaccine*Kv_gk + IL17*Kil17_gk - sigma_gk 
-      ændringSLUUT
       
       
       # combine results
