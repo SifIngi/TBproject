@@ -18,8 +18,8 @@ model = function (current_timepoint, state_values, parameters)
   IL12 = state_values [7]
   Th0 = state_values [8]
   Th1 = state_values [9]
-  Il2 = state_values [10]
-  Infg = state_values [11]
+  IL2 = state_values [10]
+  INFg = state_values [11]
   InfgR = state_values [12]
   Granuloma = state_values [13]
   TNFa = state_values [14]
@@ -34,7 +34,21 @@ model = function (current_timepoint, state_values, parameters)
     as.list (parameters),     # variable names within parameters can be used 
     {
       dVaccine = - Vaccine*Kv_m - Vaccine*Kv_d - Vaccine*Kv_gk
-      dMakrofag = Vaccine*Kv_m + TNFa*BLAAAA
+      dMakrofag = Vaccine*Kv_m + TNFa*Ktnfa_m + INFg_Kompleks*Kinfgk_m - sigma_m
+      dIL12 = Makrofag*Km_il12 - IL12*Kil12_th0 - sigma_il12
+      dTh0 = Makrofag*Km_th0 + IL12*Kil12_th0 - Th0*Kth0_th1 + IL2*Kil2_th0 + IL23*Kil23_th0 - Th0*Kth0_th17 - sigma_th0
+      dTh1 = Th0*Kth0_th1 - sigma_th0
+      dIL2 = Th1*Kth1_il2 - sigma_il2
+      dINFg = Th1*Kth1_infg + Th17*Kth17_infg + Th0*Kth0_infg + INFg_Kompleks*Kinfgk_infg - INFg*Kinfg_infgk - sigma_infg
+      dINFgk = - INFg_Kompleks*Kinfgk_infg + INFg*Kinfg_infgk - sigma_infgk
+      dGranuloma = TNFa*Ktnfa_g + INFg*Kinfg_g - sigma_g
+      dTNFa = Makrofag*Km_tnfa - sigma_tnfa
+      dDendrocyt = Vaccine*Kv_d - sigma_d
+      dIL23 = Dendrocyt*Kd_il23 - sigma_il23
+      dTh17 = Th0*Kth0_th17 - sigma_th17
+      dIL17 = Th17*Kth17_il17 - sigma_il17
+      dGranulocytKnoglemarv = Vaccine*Kv_gk + IL17*Kil17_gk - sigma_gk 
+      ændring
       
       
       # combine results
@@ -98,7 +112,7 @@ IL120 = 0
 Th00 = 0
 Th10 = 0
 IL20 = 0
-Infg0 = 0
+INFg0 = 0
 InfgR0 = 0
 Granuloma0 = 0
 TNFa0 = 0
@@ -110,7 +124,7 @@ GranulopoeticChemicalFactors0 = 0
 GranulotcytKnoglemarv0 = 0
 
 initial.values <- c(Vaccine = Vaccine0, Makrofag = Makrofag0, Fagosom = Fagosom0, Fagolysosom = Fagolysosom0, Peptider = Peptider0, 
-                    MHC2 = MHC20, IL12 = IL120, Th0 = Th00, Th1 = Th10, IL2 = IL20, Infg = Infg0, 
+                    MHC2 = MHC20, IL12 = IL120, Th0 = Th00, Th1 = Th10, IL2 = IL20, INFg = INFg0, 
                     InfgR = InfgR0, Granuloma = Granuloma0, TNFa = TNFa0, Dendrocyt = Dendrocyt0, 
                     IL23 = IL230, Th17 = Th170, IL17 = IL170, 
                     GranulopoeticChemicalFactors = GranulopoeticChemicalFactors0, GranulotcytKnoglemarv = GranulotcytKnoglemarv0)
