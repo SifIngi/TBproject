@@ -163,7 +163,7 @@ plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',yli
 
 # Hør Niels omkring sidste parameter (rødbrune streg)! 
 
-
+#hej alle
 
 
 
