@@ -41,13 +41,12 @@ model = function (current_timepoint, state_values, parameters)
       dIL2 = Th1*Kth1_il2 - sigma_il2
       dINFg = Th1*Kth1_infg + Th17*Kth17_infg + Th0*Kth0_infg + INFg_Kompleks*Kinfgk_infg - INFg*Kinfg_infgk - sigma_infg
       dINFgk = - INFg_Kompleks*Kinfgk_infg + INFg*Kinfg_infgk - sigma_infgk
-      dGranuloma = TNFa*Ktnfa_g + INFg*Kinfg_g - sigma_g
       dTNFa = Makrofag*Km_tnfa - sigma_tnfa
       dDendrocyt = Vaccine*Kv_d - sigma_d
       dIL23 = Dendrocyt*Kd_il23 - sigma_il23
       dTh17 = Th0*Kth0_th17 - sigma_th17
       dIL17 = Th17*Kth17_il17 - sigma_il17
-      dGranulocytKnoglemarv = Vaccine*Kv_gk + IL17*Kil17_gk - sigma_gk 
+      dGranulocytKnoglemarv = Vaccine*Kv_gk + IL17*Kil17_gk - sigma_gk
       
       
       # combine results
