@@ -40,11 +40,11 @@ model = function (current_timepoint, state_values, parameters)
       dIL23 = Dendrit * Kd_IL23 - sigma_IL23
       dTh17 = Th0 * KTh0_Th17 - sigma_Th17
       dIL17 = Th17 * KTh17_IL17 - sigma_IL17
-      dGranulocytKnoglemarv = Vaccine * Kv_Gk + IL17 * KIL17_gk - sigma_Gk 
+      dGranulocytKnoglemarv = Vaccine * Kv_Gk + IL17 * KIL17_Gk - sigma_Gk 
       
       # combine results
       results = c(dVaccine, dMakrofag, dIL12, dTh0, dTh1, dIL2, dIFNg, dIFNgk, dTNFa, dDendrit,
-                  dIL23, dTh17, dIL17, dGranulotcytKnoglemarv)
+                  dIL23, dTh17, dIL17, dGranulocytKnoglemarv)
       list (results)
     }
   )
@@ -88,14 +88,14 @@ sigma_IL17.value <- 1
 sigma_Gk.value <- 1
 
 parameter.list <- c(Kv_m = Kv_m.value, Kv_d = Kv_d.value, Kv_Gk = Kv_Gk.value, KTNFa_m = KTNFa_m.value, 
-                    KIFNgk_m = Km_IL12.value, KIL12_Th0 = KIL12_Th0.value,Km_Th0 = Km_Th0.value, 
+                    KIFNgk_m = KIFNgk_m.value,Km_IL12 = Km_IL12.value, KIL12_Th0 = KIL12_Th0.value,Km_Th0 = Km_Th0.value, 
                     KTh0_Th1 = KTh0_Th1.value, KTh0_Th17 = KTh0_Th17.value, KIL23_Th0 = KIL23_Th0.value,
                     KIL2_Th0 = KIL2_Th0.value, KTh1_IL2 = KTh1_IL2.value, KIFNgk_IFNg = KIFNgk_IFNg.value, 
                     KTh0_IFNg = KTh0_IFNg.value, KTh1_IFNg = KTh1_IFNg.value, KTh17_IFNg = KTh17_IFNg.value, 
                     KIFNg_IFNgk = KIFNg_IFNgk.value, Km_TNFa = Km_TNFa.value, Kd_IL23 = Kd_IL23.value, 
                     KTh17_IL17 = KTh17_IL17.value, KIL17_Gk = KIL17_Gk.value, sigma_m = sigma_m.value,
                     sigma_IL12 = sigma_IL12.value, sigma_Th0 = sigma_Th0.value, sigma_Th1 = sigma_Th1.value,
-                    sigma_IL2 = sigma_IL2.value, sigma_IFNg = sigma_IFNg.value, sigma_IFNgk.value = sigma_IFNgk.value,
+                    sigma_IL2 = sigma_IL2.value, sigma_IFNg = sigma_IFNg.value, sigma_IFNgk = sigma_IFNgk.value,
                     sigma_TNFa = sigma_TNFa.value, sigma_d = sigma_d.value, sigma_IL23 = sigma_IL23.value,
                     sigma_Th17 = sigma_Th17.value, sigma_IL17 = sigma_IL17.value, sigma_Gk = sigma_Gk.value)
 
