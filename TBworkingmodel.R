@@ -42,6 +42,7 @@ model = function (current_timepoint, state_values, parameters)
       dIL17 = Th17 * KTh17_IL17 - sigma_IL17
       dGranulocytKnoglemarv = Vaccine * Kv_Gk + IL17 * KIL17_Gk - sigma_Gk 
       
+      
       # combine results
       results = c(dVaccine, dMakrofag, dIL12, dTh0, dTh1, dIL2, dIFNg, dIFNgk, dTNFa, dDendrit,
                   dIL23, dTh17, dIL17, dGranulocytKnoglemarv)
@@ -51,41 +52,41 @@ model = function (current_timepoint, state_values, parameters)
 }
 
 # parameters
-Kv_m.value <- 1
-Kv_d.value <- 1
-Kv_Gk.value <- 1
-KTNFa_m.value <- 1 #
-KIFNgk_m.value <- 1 #
-Km_IL12.value <- 1 #
-KIL12_Th0.value <- 1 #
-Km_Th0.value <- 1 #
-KTh0_Th1.value <- 1 #
-KTh0_Th17.value <- 1 #
-KIL23_Th0.value <- 1 #
-KIL2_Th0.value <- 1 #
-KTh1_IL2.value <- 1 #
-KIFNgk_IFNg.value <- 1 #
-KTh0_IFNg.value <- 1 #
-KTh1_IFNg.value <- 1 #
-KTh17_IFNg.value <- 1
-KIFNg_IFNgk.value <- 1
-Km_TNFa.value <- 1
-Kd_IL23.value <- 1
-KTh17_IL17.value <- 1
-KIL17_Gk.value <- 1
-sigma_m.value <- 1
-sigma_IL12.value <- 1
-sigma_Th0.value <- 1
-sigma_Th1.value <- 1
-sigma_IL2.value <- 1
-sigma_IFNg.value <- 1
-sigma_IFNgk.value <- 1
-sigma_TNFa.value <- 1
-sigma_d.value <- 1
-sigma_IL23.value <- 1
-sigma_Th17.value <- 1
-sigma_IL17.value <- 1
-sigma_Gk.value <- 1
+Kv_m.value <- 0.1
+Kv_d.value <- 0.1
+Kv_Gk.value <- 0.1
+KTNFa_m.value <- 0.1 #
+KIFNgk_m.value <- 0.1 #
+Km_IL12.value <- 0.1 #
+KIL12_Th0.value <- 0.1 #
+Km_Th0.value <- 0.1 #
+KTh0_Th1.value <- 0.1 #
+KTh0_Th17.value <- 0.1 #
+KIL23_Th0.value <- 0.1 #
+KIL2_Th0.value <- 0.1 #
+KTh1_IL2.value <- 0.1 #
+KIFNgk_IFNg.value <- 0.1 #
+KTh0_IFNg.value <- .1 #
+KTh1_IFNg.value <- .1 #
+KTh17_IFNg.value <- .1
+KIFNg_IFNgk.value <- .1
+Km_TNFa.value <- .1
+Kd_IL23.value <- .1
+KTh17_IL17.value <- .1
+KIL17_Gk.value <- .1
+sigma_m.value <- 0.1
+sigma_IL12.value <- 0.001
+sigma_Th0.value <- 0.001
+sigma_Th1.value <- 0.001
+sigma_IL2.value <- 0.001
+sigma_IFNg.value <- 0.001
+sigma_IFNgk.value <- 0.001
+sigma_TNFa.value <- 0.001
+sigma_d.value <- 0.001
+sigma_IL23.value <- 0.001
+sigma_Th17.value <- 0.001
+sigma_IL17.value <- 0.001
+sigma_Gk.value <- 0.001
 
 parameter.list <- c(Kv_m = Kv_m.value, Kv_d = Kv_d.value, Kv_Gk = Kv_Gk.value, KTNFa_m = KTNFa_m.value, 
                     KIFNgk_m = KIFNgk_m.value,Km_IL12 = Km_IL12.value, KIL12_Th0 = KIL12_Th0.value,Km_Th0 = Km_Th0.value, 
@@ -126,9 +127,9 @@ time.points <- seq(0,20,by=1)
 output <- ode(y=initial.values,times = time.points,func = model, parms = parameter.list)
 
 # Plot the result 
-plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
-plot(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
-plot(IL12~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
+plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,100),ylab='Amount',xlab='Time (days)')
+plot(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(-10,100),ylab='Amount',xlab='Time (days)')
+plot(IL12~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,100),ylab='Amount',xlab='Time (days)')
 plot(Th0~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
 plot(Th1~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
 plot(IL2~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
@@ -140,8 +141,6 @@ plot(IL23~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Am
 plot(Th17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
 plot(IL17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
 plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
-
-# Hør Niels omkring sidste parameter (rødbrune streg)! 
 
 
 
