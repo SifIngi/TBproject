@@ -143,20 +143,20 @@ plot(Th17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Am
 plot(IL17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
 plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
 
-rm(list=ls())
-DATA <- read.table("DataViBruger.csv", header=TRUE, sep=";", as.is=TRUE)
-#plot(DATA$H56.vacc..Dose, DATA$mean...IL.17)
+# Herfra loades data
+DATA <- read.table("DataUdenHuller.csv", header=TRUE, sep=";", as.is=TRUE)
 
-plot(DATA$H56.vacc..Dose,DATA$mean...IL.17)
-
-DATAUDEN <- read.table("DataUdenHuller.csv", header=TRUE, sep=";", as.is=TRUE)
-plot(DATAUDEN$H56.vacc..Dose,DATAUDEN$mean...IL.17)
-x<-DATAUDEN[,"H56.vacc..Dose"]
-y<-DATAUDEN[,"mean...IL.17"]
-plot(x,y)
+VaccineDATA = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$H56.vacc..Dose)))
+RestimulerendeVaccineData = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$H56.restim..ug.ml.)))
+IL17DATA = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...IL.17)))
+INFgDATA = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...IFNg)))
+IL2DATA= as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...IL.2)))
+INFaDATA= as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...TNFa)))
 
 
-VaccineDATA = as.numeric(gsub(",", ".", gsub("\\.", "", DATAUDEN$H56.vacc..Dose)))
-IL17DATA = as.numeric(gsub(",", ".", gsub("\\.", "", DATAUDEN$mean...IL.17)))
-plot(VaccineDATA,IL17DATA)
+plot(VaccineDATA,IL17DATA,xlim=c(0,0.3))
+
+
+
+
 
