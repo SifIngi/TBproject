@@ -28,7 +28,7 @@ model = function (current_timepoint, state_values, parameters)
     as.list (parameters),     # variable names within parameters can be used 
     {
       #dVaccine = - Vaccine * Kv_m - Vaccine * Kv_d - Vaccine * Kv_Gk
-      dMakrofag = Vaccine * Kv_m + TNFa * KTNFa_m + IFNgk * KIFNgk_m - Makrofag*sigma_m
+      dMakrofag = Makrofag * Kv_m + TNFa * KTNFa_m + IFNgk * KIFNgk_m - Makrofag*sigma_m
       dIL12 = Makrofag * Km_IL12 - IL12 * KIL12_Th0 - IL12*sigma_IL12
       dTh0 = Makrofag * Km_Th0 + IL12 * KIL12_Th0 - Th0 * KTh0_Th1 + IL2 * KIL2_Th0 + IL23 * KIL23_Th0 - Th0 * KTh0_Th17 - Th0*sigma_Th0
       dTh1 = Th0 * KTh0_Th1 - Th1*sigma_Th1
@@ -36,7 +36,7 @@ model = function (current_timepoint, state_values, parameters)
       dIFNg = Th1 * KTh1_IFNg + Th17 * KTh17_IFNg + Th0 * KTh0_IFNg + IFNgk * KIFNgk_IFNg - IFNg * KIFNg_IFNgk - IFNg*sigma_IFNg
       dIFNgk = - IFNgk * KIFNgk_IFNg + IFNg * KIFNg_IFNgk - IFNgk*sigma_IFNgk
       dTNFa = Makrofag * Km_TNFa - TNFa*sigma_TNFa
-      dDendrit = Vaccine * Kv_d - Dendrit*sigma_d
+      dDendrit = Dendrit * Kv_d - Dendrit*sigma_d
       dIL23 = Dendrit * Kd_IL23 - IL23*sigma_IL23
       dTh17 = Th0 * KTh0_Th17 - Th17*sigma_Th17
       dIL17 = Th17 * KTh17_IL17 - IL17*sigma_IL17
@@ -53,33 +53,34 @@ model = function (current_timepoint, state_values, parameters)
 }
 
 # parameters
-Vaccine.value <- 1
-Kv_m.value <- 0.09
-Kv_d.value <- 0.09
+# parameters
+Vaccine.value <- 10
+Kv_m.value <- 0.09 # Kv_m skal så laves om til en cellevækstrate for makrofag
+Kv_d.value <- 0.09 # Kv_d skal så laves om til en cellevækstrate for dendridiske celler
 Kv_Gk.value <- 0.09
-KTNFa_m.value <- 0.09
-KIFNgk_m.value <- 0.09
-Km_IL12.value <- 0.09
-KIL12_Th0.value <- 0.09 
-Km_Th0.value <- 0.09
+KTNFa_m.value <- 0.009
+KIFNgk_m.value <- 0.009
+Km_IL12.value <- 0.9
+KIL12_Th0.value <- 0.9 
+Km_Th0.value <- 0.9
 KTh0_Th1.value <- 0.9 
-KTh0_Th17.value <- 0.09
-KIL23_Th0.value <- 0.090 
-KIL2_Th0.value <- 0.09 
-KTh1_IL2.value <- 0.09
-KIFNgk_IFNg.value <- 0.09 
-KTh0_IFNg.value <- .09 
-KTh1_IFNg.value <- .09
-KTh17_IFNg.value <- .09
-KIFNg_IFNgk.value <- .09
-Km_TNFa.value <- .09
-Kd_IL23.value <- .09
-KTh17_IL17.value <- .09
-KIL17_Gk.value <- .09
-sigma_m.value <- 8
+KTh0_Th17.value <- 0.9
+KIL23_Th0.value <- 0.009 
+KIL2_Th0.value <- 0.009 
+KTh1_IL2.value <- 0.9
+KIFNgk_IFNg.value <- 0.9 
+KTh0_IFNg.value <- .9 
+KTh1_IFNg.value <- .009
+KTh17_IFNg.value <- .9
+KIFNg_IFNgk.value <- .9
+Km_TNFa.value <- .9
+Kd_IL23.value <- .9
+KTh17_IL17.value <- .9
+KIL17_Gk.value <- .9
+sigma_m.value <- 0.8
 sigma_IL12.value <- 0.8
-sigma_Th0.value <- 10
-sigma_Th1.value <- 0 #0.8
+sigma_Th0.value <- 0.8
+sigma_Th1.value <- 0.8 #0.8
 sigma_IL2.value <- 0.8
 sigma_IFNg.value <- 0.8
 sigma_IFNgk.value <- 0.8
@@ -104,7 +105,7 @@ parameter.list <- c(Vaccine = Vaccine.value, Kv_m = Kv_m.value, Kv_d = Kv_d.valu
 
 # initial values
 #Vaccine0 = 10     
-Makrofag0 = 0
+Makrofag0 = 10
 IL120 = 0
 Th00 = 0
 Th10 = 0
@@ -112,7 +113,7 @@ IL20 = 0
 IFNg0 = 0
 IFNgk0 = 0
 TNFa0 = 0
-Dendrit0 = 0
+Dendrit0 = 10
 IL230 = 0
 Th170 = 0
 IL170 = 0
@@ -123,26 +124,32 @@ initial.values <- c(Makrofag = Makrofag0, IL12 = IL120, Th0 = Th00, Th1 = Th10, 
                     GranulotcytKnoglemarv = GranulotcytKnoglemarv0)
 
 # Output timepoints
-time.points <- seq(0,10,by=1)
+Dose.points <- seq(0,10,by=1)
 
 # simulate the epidemic
-output <- ode(y=initial.values,times = time.points,func = model, parms = parameter.list)
+output <- ode(y=initial.values,times = Dose.points,func = model, parms = parameter.list)
 
-# Plot the result 
-plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.20),ylab='Amount',xlab='Time (days)')
-plot(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.03),ylab='Amount',xlab='Time (days)')
-plot(IL12~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.004),ylab='Amount',xlab='Time (days)')
-plot(Th0~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,0.10),ylim=c(0,0.00010),ylab='Amount',xlab='Time (days)')
-plot(Th1~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,0.1),ylim=c(0,0.01),ylab='Amount',xlab='Time (days)')
-plot(IL2~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
-plot(IFNg~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
-plot(IFNgk~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
-plot(TNFa~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,100000000),ylab='Amount',xlab='Time (days)')
-plot(Dendrit~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
-plot(IL23~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
-plot(Th17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
-plot(IL17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
-plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)')
+# Plot the results
+plot(Makrofag~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Dose')
+plot(IL12~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Dose')
+plot(Th0~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,10),ylim=c(0,10),ylab='Amount',xlab='Dose')
+plot(Th1~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,0.1),ylim=c(0,1),ylab='Amount',xlab='Dose')
+plot(IL2~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,4),ylab='Amount',xlab='Dose')
+plot(IFNg~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Dose')
+plot(IFNgk~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,2),ylab='Amount',xlab='Dose')
+plot(TNFa~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Dose')
+plot(Dendrit~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Dose')
+plot(IL23~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Dose')
+plot(Th17~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Dose')
+plot(IL17~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Dose')
+plot(GranulotcytKnoglemarv~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Dose')
+
+
+# Ligger alle responscellerne sammen og plotter dem henad tiden. Skulle gerne give en peak form kurve
+# Først gemmet output som en dataframe
+SimulatedData <- as.data.frame(output)
+ResponsCeller <- (SimulatedData$Th0 + SimulatedData$Th1 + SimulatedData$Th17)
+plot(ResponsCeller~Dose.points,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Dose')
 
 # Herfra loades data
 DATA <- read.table("DataUdenHuller.csv", header=TRUE, sep=";", as.is=TRUE)
