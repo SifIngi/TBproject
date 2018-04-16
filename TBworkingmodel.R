@@ -35,13 +35,11 @@ model = function (current_timepoint, state_values, parameters)
   with ( 
     as.list (parameters),     # variable names within parameters can be used 
     {
-      Kv_m <- ifelse(Vaccine0 > 0.02, Kv_m.value, 0.001)
-      Kv_d <- ifelse(Vaccine0 > 0.02, Kv_d.value, 0.2)
-      #Kv_Gk <- ifelse(Vaccine > 0, Kv_Gk.value, 0)
-      #Vaccine <- ifelse(Kv_d > 0, Vaccine,0)
-      
-      dVaccine = - (Kv_m) - (Kv_d) - Kv_Gk
-      dMakrofag = (Kv_m) + TNFa * KTNFa_m + IFNgk * KIFNgk_m - Makrofag*sigma_m
+      Kv_m <- ifelse(Vaccine0 > 0.02, Kv_m.value, 0.01)
+      Kv_d <- ifelse(Vaccine0 > 0.02, Kv_d.value, 0.02)
+
+      dVaccine = - (Vaccine*Kv_m) - (Vaccine*Kv_d) - Vaccine*Kv_Gk
+      dMakrofag = (Vaccine*Kv_m) + TNFa * KTNFa_m + IFNgk * KIFNgk_m/(KM_TNFa+IFNgk) - Makrofag*sigma_m
       dIL12 = Makrofag * Km_IL12 - IL12 * KIL12_Th0 - IL12*sigma_IL12
       dTh0_IL12 = Makrofag * Km_Th0 + IL12 * KIL12_Th0 - Th0_IL12 * KTh0_Th1 + IL2 * KIL2_Th0  - Th0_IL12*sigma_Th0_IL12
       dTh0_IL17 = IL23 * KIL23_Th0 - Th0_IL17 * KTh0_Th17 - Th0_IL17*sigma_Th0_IL17
@@ -50,11 +48,11 @@ model = function (current_timepoint, state_values, parameters)
       dIFNg = Th1 * KTh1_IFNg + Th17 * KTh17_IFNg + Th0_IL12 * KTh0_IL12_IFNg + IFNgk * KIFNgk_IFNg - IFNg * KIFNg_IFNgk + Th0_IL17 * KTh0_IL17_IFNg - IFNg*sigma_IFNg
       dIFNgk = - IFNgk * KIFNgk_IFNg + IFNg * KIFNg_IFNgk - IFNgk*sigma_IFNgk
       dTNFa = Makrofag * Km_TNFa - TNFa*sigma_TNFa
-      dDendrit = Kv_d - Dendrit*sigma_d
+      dDendrit = Vaccine*Kv_d - Dendrit*sigma_d
       dIL23 = Dendrit * Kd_IL23 - IL23*sigma_IL23
       dTh17 = Th0_IL17 * KTh0_Th17 - Th17*sigma_Th17
       dIL17 = Th17 * KTh17_IL17 - IL17*sigma_IL17
-      dGranulocytKnoglemarv =  Kv_Gk + IL17 * KIL17_Gk - GranulotcytKnoglemarv*sigma_Gk 
+      dGranulocytKnoglemarv =  Vaccine*Kv_Gk + IL17 * KIL17_Gk - GranulotcytKnoglemarv*sigma_Gk 
       
       
       
@@ -67,44 +65,45 @@ model = function (current_timepoint, state_values, parameters)
 }
 
 # parameters
-KTh0_IL17_IFNg.value <- 0.00009
-KTh0_IL12_IFNg.value <- 0.00009
-Kv_m.value <- 0.0002
-Kv_d.value <- 0.000003
-Kv_Gk.value <- 0.000009
-KTNFa_m.value <- 0.000009
-KIFNgk_m.value <- 0.000009
-Km_IL12.value <- 0.000009
-KIL12_Th0.value <- 0.00009 
-Km_Th0.value <- 0.00009
-KTh0_Th1.value <- 0.00009 
-KTh0_Th17.value <- 0.00009
-KIL23_Th0.value <- 0.00009 
-KIL2_Th0.value <- 0.000009 
-KTh1_IL2.value <- 0.000009
-KIFNgk_IFNg.value <- 0.00009 
-KTh0_IFNg.value <- .00009 
-KTh1_IFNg.value <- .00009
-KTh17_IFNg.value <- .00009
-KIFNg_IFNgk.value <- .00009
-Km_TNFa.value <- .00009
-Kd_IL23.value <- .0009
-KTh17_IL17.value <- .00009
-KIL17_Gk.value <- .00009
-sigma_m.value <- 0.00023
-sigma_IL12.value <- 0.0008
-sigma_Th0_IL12.value <- 0.00023
-sigma_Th0_IL17.value <- 0.00023
-sigma_Th1.value <- 0.0008 #0.8
-sigma_IL2.value <- 0.0008
-sigma_IFNg.value <- 0.0008
-sigma_IFNgk.value <- 0.0008
-sigma_TNFa.value <- 0.0008
-sigma_d.value <- 0.00023
-sigma_IL23.value <- 0.0008
-sigma_Th17.value <- 0.0008
-sigma_IL17.value <- 0.0008
-sigma_Gk.value <- 0.00023
+KTh0_IL17_IFNg.value <- 0.9
+KTh0_IL12_IFNg.value <- 0.9
+Kv_m.value <- 0.03
+Kv_d.value <- 0.02
+Kv_Gk.value <- 0.025
+KTNFa_m.value <- 0.002
+KIFNgk_m.value <- 100
+Km_IL12.value <- 0.09
+KIL12_Th0.value <- 0.9 
+Km_Th0.value <- 0.9
+KTh0_Th1.value <- 0.9 
+KTh0_Th17.value <- 0.9
+KIL23_Th0.value <- 0.9 
+KIL2_Th0.value <- 0.09 
+KTh1_IL2.value <- 0.09
+KIFNgk_IFNg.value <- 0.9 
+KTh0_IFNg.value <- .9 
+KTh1_IFNg.value <- .9
+KTh17_IFNg.value <- .9
+KIFNg_IFNgk.value <- .9
+Km_TNFa.value <- .9
+Kd_IL23.value <- .09
+KTh17_IL17.value <- .9
+KIL17_Gk.value <- .9
+sigma_m.value <- 3
+sigma_IL12.value <- 0.08
+sigma_Th0_IL12.value <- 0.023
+sigma_Th0_IL17.value <- 0.023
+sigma_Th1.value <- 0.08 #0.8
+sigma_IL2.value <- 0.08
+sigma_IFNg.value <- 0.08
+sigma_IFNgk.value <- 0.08
+sigma_TNFa.value <- 0.08
+sigma_d.value <- 0.023
+sigma_IL23.value <- 0.08
+sigma_Th17.value <- 0.08
+sigma_IL17.value <- 0.08
+sigma_Gk.value <- 0.023
+KM_TNFa.value <- 45
 
 parameter.list <- c( KTh0_IL17_IFNg = KTh0_IL17_IFNg.value,Kv_m = Kv_m.value, Kv_d = Kv_d.value, Kv_Gk = Kv_Gk.value, KTNFa_m = KTNFa_m.value, 
                     KIFNgk_m = KIFNgk_m.value,Km_IL12 = Km_IL12.value, KIL12_Th0 = KIL12_Th0.value,Km_Th0 = Km_Th0.value, 
@@ -116,11 +115,12 @@ parameter.list <- c( KTh0_IL17_IFNg = KTh0_IL17_IFNg.value,Kv_m = Kv_m.value, Kv
                     sigma_IL12 = sigma_IL12.value, sigma_Th0_IL12 = sigma_Th0_IL12.value, sigma_Th1 = sigma_Th1.value,
                     sigma_IL2 = sigma_IL2.value, sigma_IFNg = sigma_IFNg.value, sigma_IFNgk = sigma_IFNgk.value,
                     sigma_TNFa = sigma_TNFa.value, sigma_d = sigma_d.value, sigma_IL23 = sigma_IL23.value,
-                    sigma_Th17 = sigma_Th17.value, sigma_IL17 = sigma_IL17.value, sigma_Gk = sigma_Gk.value,sigma_Th0_IL17 = sigma_Th0_IL17.value)
+                    sigma_Th17 = sigma_Th17.value, sigma_IL17 = sigma_IL17.value, sigma_Gk = sigma_Gk.value,
+                    KM_TNFa = KM_TNFa.value, sigma_Th0_IL17 = sigma_Th0_IL17.value)
 
 # initial values
 Vaccine0 = 0.02
-Makrofag0 = 5
+Makrofag0 = 1
 IL120 = 0
 Th0_IL12_0 = 2
 Th0_IL17_0 = 2
@@ -129,7 +129,7 @@ IL20 = 0
 IFNg0 = 0
 IFNgk0 = 0
 TNFa0 = 0
-Dendrit0 = .5
+Dendrit0 = 1
 IL230 = 0
 Th170 = 0
 IL170 = 0
@@ -146,13 +146,13 @@ time.points <- seq(0,2*365,by=1)
 output <- ode(y=initial.values,times = time.points,func = model, parms = parameter.list)
 
 # Plot the result 
-plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.02),xlim=c(0,10),ylab='Amount',xlab='Time (days)')
-plot(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Time (days)')
+plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.02),xlim=c(0,35),ylab='Amount',xlab='Time (days)')
+plot(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,100),ylab='Amount',xlab='Time (days)')
 plot(IL12~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
-plot(Th0_IL12~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,10),ylim=c(0,4),ylab='Amount',xlab='Time (days)')
+plot(Th0_IL12~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,10),ylim=c(0,10),ylab='Amount',xlab='Time (days)')
 plot(Th0_IL17~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,10),ylim=c(0,4),ylab='Amount',xlab='Time (days)')
 plot(Th1~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
-plot(IL2~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.001),ylab='Amount',xlab='Time (days)')
+plot(IL2~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
 plot(IFNg~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.2),ylab='Amount',xlab='Time (days)')
 plot(IFNgk~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
 plot(TNFa~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.6),ylab='Amount',xlab='Time (days)')
@@ -164,29 +164,29 @@ plot(IL17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.01),ylab=
 plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
 
 # Herfra loades data
-DATA <- read.table("DataUdenHuller.csv", header=TRUE, sep=";", as.is=TRUE)
-
-VaccineDATA = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$H56.vacc..Dose)))
-RestimulerendeVaccineData = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$H56.restim..ug.ml.)))
-IL17DATA = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...IL.17)))
-INFgDATA = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...IFNg)))
-IL2DATA= as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...IL.2)))
-INFaDATA= as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...TNFa)))
-
-
-plot(VaccineDATA,IL17DATA,xlim=c(0,50))
-plot(RestimulerendeVaccineData,IL17DATA,xlim=c(0,100))
-
-CelleData <- read.table("Celler.csv", header=TRUE, sep=";", as.is=TRUE)
-plot(CelleData$Time..days,CelleData$Response..SFU.mill.splenocytes.)
-
-
-
-
-dose0CelleData <- CelleData[1:45,c('Time..days.','Response..SFU.mill.splenocytes.')]
-dose01CelleData <- CelleData[46:90,c('Time..days.','Response..SFU.mill.splenocytes.')]
-
-plot(dose01CelleData$Time..days,dose01CelleData$Response..SFU.mill.splenocytes.)
+# DATA <- read.table("DataUdenHuller.csv", header=TRUE, sep=";", as.is=TRUE)
+# 
+# VaccineDATA = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$H56.vacc..Dose)))
+# RestimulerendeVaccineData = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$H56.restim..ug.ml.)))
+# IL17DATA = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...IL.17)))
+# INFgDATA = as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...IFNg)))
+# IL2DATA= as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...IL.2)))
+# INFaDATA= as.numeric(gsub(",", ".", gsub("\\.", "", DATA$mean...TNFa)))
+# 
+# 
+# plot(VaccineDATA,IL17DATA,xlim=c(0,50))
+# plot(RestimulerendeVaccineData,IL17DATA,xlim=c(0,1))
+# 
+# CelleData <- read.table("Celler.csv", header=TRUE, sep=";", as.is=TRUE)
+# plot(CelleData$Time..days,CelleData$Response..SFU.mill.splenocytes.)
+# 
+# 
+# 
+# 
+# dose0CelleData <- CelleData[1:45,c('Time..days.','Response..SFU.mill.splenocytes.')]
+# dose01CelleData <- CelleData[46:90,c('Time..days.','Response..SFU.mill.splenocytes.')]
+# 
+# plot(dose01CelleData$Time..days,dose01CelleData$Response..SFU.mill.splenocytes.)
 
 
 
