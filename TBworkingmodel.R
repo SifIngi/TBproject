@@ -103,7 +103,7 @@ sigma_IL23.value <- 0.08
 sigma_Th17.value <- 0.08
 sigma_IL17.value <- 0.08
 sigma_Gk.value <- 0.023
-KM_TNFa.value <- 45
+KM_TNFa.value <- 1000
 
 parameter.list <- c( KTh0_IL17_IFNg = KTh0_IL17_IFNg.value,Kv_m = Kv_m.value, Kv_d = Kv_d.value, Kv_Gk = Kv_Gk.value, KTNFa_m = KTNFa_m.value, 
                     KIFNgk_m = KIFNgk_m.value,Km_IL12 = Km_IL12.value, KIL12_Th0 = KIL12_Th0.value,Km_Th0 = Km_Th0.value, 
@@ -155,10 +155,10 @@ plot(Th1~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,700),ylim=c(
 plot(IL2~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,700),ylim=c(0,1000000),ylab='Amount',xlab='Time (days)',main="IL2")
 plot(IFNg~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,700), ylim=c(0,6000000),ylab='Amount',xlab='Time (days)',main="IFNg")
 plot(IFNgk~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,700),ylim=c(0,5000000),ylab='Amount',xlab='Time (days)',main="IFNgk")
-plot(TNFa~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,700),ylab='Amount',xlab='Time (days)',main="TNFa")
+plot(TNFa~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,450),ylab='Amount',xlab='Time (days)',main="TNFa")
 
-plot(Dendrit~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,2),xlim=c(0,200),ylab='Amount',xlab='Time (days)',main="Dendrit")
-plot(IL23~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)',main="IL23")
+plot(Dendrit~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1.5),xlim=c(0,100),ylab='Amount',xlab='Time (days)',main="Dendrit")
+plot(IL23~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.8),ylab='Amount',xlab='Time (days)',main="IL23")
 plot(Th17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,8),ylab='Amount',xlab='Time (days)',main="Th17")
 plot(IL17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,80),ylab='Amount',xlab='Time (days)',main="IL17")
 plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1800),ylab='Amount',xlab='Time (days)',main="GranulotcytKnoglemarv")
