@@ -93,7 +93,7 @@ sigma_m.value <- 3
 sigma_IL12.value <- 0.08
 sigma_Th0_IL12.value <- 0.023
 sigma_Th0_IL17.value <- 0.023
-sigma_Th1.value <- 0.08 #0.8
+sigma_Th1.value <- 0.08 
 sigma_IL2.value <- 0.08
 sigma_IFNg.value <- 0.08
 sigma_IFNgk.value <- 0.08
@@ -122,8 +122,8 @@ parameter.list <- c( KTh0_IL17_IFNg = KTh0_IL17_IFNg.value,Kv_m = Kv_m.value, Kv
 Vaccine0 = 0.02
 Makrofag0 = 1
 IL120 = 0
-Th0_IL12_0 = 2
-Th0_IL17_0 = 2
+Th0_IL12_0 = 0
+Th0_IL17_0 = 0
 Th10 = 0
 IL20 = 0
 IFNg0 = 0
@@ -146,22 +146,22 @@ time.points <- seq(0,2*365,by=1)
 output <- ode(y=initial.values,times = time.points,func = model, parms = parameter.list)
 
 # Plot the result 
-plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.02),xlim=c(0,35),ylab='Amount',xlab='Time (days)')
-plot(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,100),ylab='Amount',xlab='Time (days)')
-plot(IL12~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
-plot(Th0_IL12~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,10),ylim=c(0,10),ylab='Amount',xlab='Time (days)')
-plot(Th0_IL17~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,10),ylim=c(0,4),ylab='Amount',xlab='Time (days)')
-plot(Th1~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
-plot(IL2~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
-plot(IFNg~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.2),ylab='Amount',xlab='Time (days)')
-plot(IFNgk~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
-plot(TNFa~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.6),ylab='Amount',xlab='Time (days)')
+plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.03),xlim=c(0,50),ylab='Amount',xlab='Time (days)',main="Vaccine")
+plot(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,40),ylab='Amount',xlab='Time (days)',main="Makrofag")
+plot(IL12~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,4),ylab='Amount',xlab='Time (days)',main="IL12")
+plot(Th0_IL12~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,700),ylim=c(0,100000),ylab='Amount',xlab='Time (days)',main="Th0_IL12")
+plot(Th0_IL17~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,700),ylim=c(0,1.1),ylab='Amount',xlab='Time (days)',main="Th0_IL17")
+plot(Th1~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,700),ylim=c(0,1000000),ylab='Amount',xlab='Time (days)',main="Th1")
+plot(IL2~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,700),ylim=c(0,1000000),ylab='Amount',xlab='Time (days)',main="IL2")
+plot(IFNg~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,700), ylim=c(0,6000000),ylab='Amount',xlab='Time (days)',main="IFNg")
+plot(IFNgk~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,700),ylim=c(0,5000000),ylab='Amount',xlab='Time (days)',main="IFNgk")
+plot(TNFa~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,700),ylab='Amount',xlab='Time (days)',main="TNFa")
 
-plot(Dendrit~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,6),xlim=c(0,6),ylab='Amount',xlab='Time (days)')
-plot(IL23~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.2),ylab='Amount',xlab='Time (days)')
-plot(Th17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
-plot(IL17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.01),ylab='Amount',xlab='Time (days)')
-plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
+plot(Dendrit~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,2),xlim=c(0,200),ylab='Amount',xlab='Time (days)',main="Dendrit")
+plot(IL23~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1),ylab='Amount',xlab='Time (days)',main="IL23")
+plot(Th17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,8),ylab='Amount',xlab='Time (days)',main="Th17")
+plot(IL17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,80),ylab='Amount',xlab='Time (days)',main="IL17")
+plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,1800),ylab='Amount',xlab='Time (days)',main="GranulotcytKnoglemarv")
 
 # Herfra loades data
 # DATA <- read.table("DataUdenHuller.csv", header=TRUE, sep=";", as.is=TRUE)
