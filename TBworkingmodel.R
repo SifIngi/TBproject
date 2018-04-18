@@ -189,4 +189,88 @@ plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',yli
 # plot(dose01CelleData$Time..days,dose01CelleData$Response..SFU.mill.splenocytes.)
 
 
+N.iter <- 100
+KTh0_IL17_IFNg.list <- runif(N.iter,min=0.7,max=1.2)
+KTh0_IL12_IFNg.list <- runif(N.iter,min=0.7,max=1.2)
+Kv_m.list <- runif(N.iter,min=0.01,max=0.05)
+Kv_d.list <- runif(N.iter,min=0.001,max=0.04) 
+Kv_Gk.list <- runif(N.iter,min=0.005,max=0.05) 
+KTNFa_m.list <- runif(N.iter,min=0.0005,max=0.004) 
+KIFNgk_m.list <- runif(N.iter,min=50,max=150)
+Km_IL12.list <- runif(N.iter,min=0.06,max=0.11)
+KIL12_Th0.list <- runif(N.iter,min=0.75,max=1.2) 
+Km_Th0.list <- runif(N.iter,min=0.75,max=1.2)
+KTh0_Th1.list <- runif(N.iter,min=0.75,max=1.2) 
+KTh0_Th17.list <- runif(N.iter,min=0.75,max=1.2)
+KIL23_Th0.list <- runif(N.iter,min=0.75,max=1.2) 
+KIL2_Th0.list <- runif(N.iter,min=0.075,max=0.12) 
+KTh1_IL2.list <- runif(N.iter,min=0.075,max=0.12)
+KIFNgk_IFNg.list <- runif(N.iter,min=0.75,max=1.2) 
+KTh0_IFNg.list <- runif(N.iter,min=0.75,max=1.2)
+KTh1_IFNg.list <- runif(N.iter,min=0.75,max=1.2)
+KTh17_IFNg.list <- runif(N.iter,min=0.75,max=1.2)
+KIFNg_IFNgk.list <- runif(N.iter,min=0.75,max=1.2)
+Km_TNFa.list <- runif(N.iter,min=0.75,max=1.2)
+Kd_IL23.list <- runif(N.iter,min=0.075,max=0.12)
+KTh17_IL17.list <- runif(N.iter,min=0.75,max=1.2)
+KIL17_Gk.list <- runif(N.iter,min=0.75,max=1.2)
+sigma_m.list <- runif(N.iter,min=1,max=5)
+sigma_IL12.list <- runif(N.iter,min=0.06,max=0.1)
+sigma_Th0_IL12.list <- runif(N.iter,min=0.003,max=0.043)
+sigma_Th0_IL17.list <- runif(N.iter,min=0.003,max=0.043)
+sigma_Th1.list <- runif(N.iter,min=0.06,max=0.1)
+sigma_IL2.list <- runif(N.iter,min=0.06,max=0.1)
+sigma_IFNg.list <- runif(N.iter,min=0.06,max=0.1)
+sigma_IFNgk.list <- runif(N.iter,min=0.06,max=0.1)
+sigma_TNFa.list <- runif(N.iter,min=0.06,max=0.1)
+sigma_d.list <- runif(N.iter,min=0.003,max=0.043)
+sigma_IL23.list <- runif(N.iter,min=0.06,max=0.1)
+sigma_Th17.list <- runif(N.iter,min=0.06,max=0.1)
+sigma_IL17.list <- runif(N.iter,min=0.06,max=0.1)
+sigma_Gk.list <- runif(N.iter,min=0.003,max=0.043)
+KM_TNFa.list <- runif(N.iter,min=5,max=90) 
+
+
+for ( i in 1:N.iter){
+  # simulate the epidemic
+  parameter.list <- c(KTh0_IL17_IFNg = KTh0_IL17_IFNg.list[i],Kv_m = Kv_m.list[i], Kv_d = Kv_d.list[i], Kv_Gk = Kv_Gk.list[i], KTNFa_m = KTNFa_m.list[i], 
+                      KIFNgk_m = KIFNgk_m.list[i],Km_IL12 = Km_IL12.list[i], KIL12_Th0 = KIL12_Th0.list[i],Km_Th0 = Km_Th0.list[i], 
+                      KTh0_Th1 = KTh0_Th1.list[i], KTh0_Th17 = KTh0_Th17.list[i], KIL23_Th0 = KIL23_Th0.list[i],
+                      KIL2_Th0 = KIL2_Th0.list[i], KTh1_IL2 = KTh1_IL2.list[i], KIFNgk_IFNg = KIFNgk_IFNg.list[i], 
+                      KTh0_IL12_IFNg = KTh0_IL12_IFNg.list[i], KTh1_IFNg = KTh1_IFNg.list[i], KTh17_IFNg = KTh17_IFNg.list[i], 
+                      KIFNg_IFNgk = KIFNg_IFNgk.list[i], Km_TNFa = Km_TNFa.list[i], Kd_IL23 = Kd_IL23.list[i], 
+                      KTh17_IL17 = KTh17_IL17.list[i], KIL17_Gk = KIL17_Gk.list[i], sigma_m = sigma_m.list[i],
+                      sigma_IL12 = sigma_IL12.list[i], sigma_Th0_IL12 = sigma_Th0_IL12.list[i], sigma_Th1 = sigma_Th1.list[i],
+                      sigma_IL2 = sigma_IL2.list[i], sigma_IFNg = sigma_IFNg.list[i], sigma_IFNgk = sigma_IFNgk.list[i],
+                      sigma_TNFa = sigma_TNFa.list[i], sigma_d = sigma_d.list[i], sigma_IL23 = sigma_IL23.list[i],
+                      sigma_Th17 = sigma_Th17.list[i], sigma_IL17 = sigma_IL17.list[i], sigma_Gk = sigma_Gk.list[i],
+                      KM_TNFa = KM_TNFa.list[i], sigma_Th0_IL17 = sigma_Th0_IL17.list[i])
+  output <- ode(y=initial.values,times = time.points,func = model, parms = parameter.list)
+}
+
+m.res <- data.frame(KTh0_IL17_IFNg = KTh0_IL17_IFNg.list[i],Kv_m = Kv_m.list[i], Kv_d = Kv_d.list[i], Kv_Gk = Kv_Gk.list[i], KTNFa_m = KTNFa_m.list[i], 
+                    KIFNgk_m = KIFNgk_m.list[i],Km_IL12 = Km_IL12.list[i], KIL12_Th0 = KIL12_Th0.list[i],Km_Th0 = Km_Th0.list[i], 
+                    KTh0_Th1 = KTh0_Th1.list[i], KTh0_Th17 = KTh0_Th17.list[i], KIL23_Th0 = KIL23_Th0.list[i],
+                    KIL2_Th0 = KIL2_Th0.list[i], KTh1_IL2 = KTh1_IL2.list[i], KIFNgk_IFNg = KIFNgk_IFNg.list[i], 
+                    KTh0_IL12_IFNg = KTh0_IL12_IFNg.list[i], KTh1_IFNg = KTh1_IFNg.list[i], KTh17_IFNg = KTh17_IFNg.list[i], 
+                    KIFNg_IFNgk = KIFNg_IFNgk.list[i], Km_TNFa = Km_TNFa.list[i], Kd_IL23 = Kd_IL23.list[i], 
+                    KTh17_IL17 = KTh17_IL17.list[i], KIL17_Gk = KIL17_Gk.list[i], sigma_m = sigma_m.list[i],
+                    sigma_IL12 = sigma_IL12.list[i], sigma_Th0_IL12 = sigma_Th0_IL12.list[i], sigma_Th1 = sigma_Th1.list[i],
+                    sigma_IL2 = sigma_IL2.list[i], sigma_IFNg = sigma_IFNg.list[i], sigma_IFNgk = sigma_IFNgk.list[i],
+                    sigma_TNFa = sigma_TNFa.list[i], sigma_d = sigma_d.list[i], sigma_IL23 = sigma_IL23.list[i],
+                    sigma_Th17 = sigma_Th17.list[i], sigma_IL17 = sigma_IL17.list[i], sigma_Gk = sigma_Gk.list[i],
+                    KM_TNFa = KM_TNFa.list[i], sigma_Th0_IL17 = sigma_Th0_IL17.list[i])
+
+
+# Scatterplots
+pairs(m.res)
+
+
+# PRCC
+
+library(epiR)
+
+epi.prcc(m.res[,c(1,2,3)]) # beta/gamma er positiv/negativ korreleret med i.max
+
+epi.prcc(m.res[,c(1,2,4)]) # beta/gamma er negativ/svagt positiv korreleret med t.max
 
