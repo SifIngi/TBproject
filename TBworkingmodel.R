@@ -24,6 +24,7 @@ model = function (current_timepoint, state_values, parameters)
   Th17 = state_values [13]
   IL17 = state_values [14]
   GranulotcytKnoglemarv = state_values[15]
+  #kM = state_values[16]
   
   
   #      ifelse current_timepoint >= stop
@@ -35,26 +36,34 @@ model = function (current_timepoint, state_values, parameters)
   with ( 
     as.list (parameters),     # variable names within parameters can be used 
     {
-      Kv_m <- ifelse(Vaccine0 > 0.02, Kv_m.value, 0.001)
-      Kv_d <- ifelse(Vaccine0 > 0.02, Kv_d.value, 0.2)
+      #Kv_m <- ifelse(Vaccine > 0.02, Kv_m.value, 0.00000001)
+      #Kv_d <- ifelse(Vaccine > 0.02, Kv_d.value, 2)
       #Kv_Gk <- ifelse(Vaccine > 0, Kv_Gk.value, 0)
       #Vaccine <- ifelse(Kv_d > 0, Vaccine,0)
+      Kv_m = 5*(250-Vaccine0)/((250-Vaccine0)+1)-(250-Vaccine0)*0.02
+      Kv_d = 5*Vaccine0/(Vaccine0+1)-Vaccine0*0.02
+      #Kv_m = 1
+      #Kv_d = 1
       
-      dVaccine = - (Kv_m) - (Kv_d) - Kv_Gk
-      dMakrofag = (Kv_m) + TNFa * KTNFa_m + IFNgk * KIFNgk_m - Makrofag*sigma_m
+      
+      dVaccine = - Vaccine*Kv_m - Vaccine*Kv_d - Vaccine*Kv_Gk
+      dMakrofag = Vaccine*(Kv_m) + TNFa * KTNFa_m + IFNgk * KIFNgk_m - Makrofag*sigma_m
       dIL12 = Makrofag * Km_IL12 - IL12 * KIL12_Th0 - IL12*sigma_IL12
       dTh0_IL12 = Makrofag * Km_Th0 + IL12 * KIL12_Th0 - Th0_IL12 * KTh0_Th1 + IL2 * KIL2_Th0  - Th0_IL12*sigma_Th0_IL12
-      dTh0_IL17 = IL23 * KIL23_Th0 - Th0_IL17 * KTh0_Th17 - Th0_IL17*sigma_Th0_IL17
       dTh1 = Th0_IL12 * KTh0_Th1 - Th1*sigma_Th1
       dIL2 = Th1 * KTh1_IL2 - IL2*sigma_IL2
       dIFNg = Th1 * KTh1_IFNg + Th17 * KTh17_IFNg + Th0_IL12 * KTh0_IL12_IFNg + IFNgk * KIFNgk_IFNg - IFNg * KIFNg_IFNgk + Th0_IL17 * KTh0_IL17_IFNg - IFNg*sigma_IFNg
       dIFNgk = - IFNgk * KIFNgk_IFNg + IFNg * KIFNg_IFNgk - IFNgk*sigma_IFNgk
       dTNFa = Makrofag * Km_TNFa - TNFa*sigma_TNFa
-      dDendrit = Kv_d - Dendrit*sigma_d
+      dTh0_IL17 = IL23 * KIL23_Th0 - Th0_IL17 * KTh0_Th17 - Th0_IL17*sigma_Th0_IL17
+      dDendrit = Vaccine*Kv_d - Dendrit*sigma_d
       dIL23 = Dendrit * Kd_IL23 - IL23*sigma_IL23
       dTh17 = Th0_IL17 * KTh0_Th17 - Th17*sigma_Th17
       dIL17 = Th17 * KTh17_IL17 - IL17*sigma_IL17
-      dGranulocytKnoglemarv =  Kv_Gk + IL17 * KIL17_Gk - GranulotcytKnoglemarv*sigma_Gk 
+      dGranulocytKnoglemarv =  Vaccine*Kv_Gk + IL17 * KIL17_Gk - GranulotcytKnoglemarv*sigma_Gk 
+
+
+
       
       
       
@@ -69,44 +78,44 @@ model = function (current_timepoint, state_values, parameters)
 # parameters
 KTh0_IL17_IFNg.value <- 0.00009
 KTh0_IL12_IFNg.value <- 0.00009
-Kv_m.value <- 0.0002
-Kv_d.value <- 0.000003
-Kv_Gk.value <- 0.000009
-KTNFa_m.value <- 0.000009
-KIFNgk_m.value <- 0.000009
-Km_IL12.value <- 0.000009
-KIL12_Th0.value <- 0.00009 
+#Kv_m.value <- 0.02
+#Kv_d.value <- 0.000003
+Kv_Gk.value <- 0.00009 # Ændre denne værdi for dose elimination
+KTNFa_m.value <- 0.00009
+KIFNgk_m.value <- 0.00009
+Km_IL12.value <- 0.00009
+KIL12_Th0.value <- 0.0009 
 Km_Th0.value <- 0.00009
 KTh0_Th1.value <- 0.00009 
 KTh0_Th17.value <- 0.00009
 KIL23_Th0.value <- 0.00009 
-KIL2_Th0.value <- 0.000009 
-KTh1_IL2.value <- 0.000009
+KIL2_Th0.value <- 0.00009 
+KTh1_IL2.value <- 0.00009
 KIFNgk_IFNg.value <- 0.00009 
 KTh0_IFNg.value <- .00009 
 KTh1_IFNg.value <- .00009
 KTh17_IFNg.value <- .00009
 KIFNg_IFNgk.value <- .00009
 Km_TNFa.value <- .00009
-Kd_IL23.value <- .0009
+Kd_IL23.value <- 0.00009
 KTh17_IL17.value <- .00009
 KIL17_Gk.value <- .00009
-sigma_m.value <- 0.00023
-sigma_IL12.value <- 0.0008
-sigma_Th0_IL12.value <- 0.00023
-sigma_Th0_IL17.value <- 0.00023
-sigma_Th1.value <- 0.0008 #0.8
-sigma_IL2.value <- 0.0008
-sigma_IFNg.value <- 0.0008
-sigma_IFNgk.value <- 0.0008
-sigma_TNFa.value <- 0.0008
-sigma_d.value <- 0.00023
-sigma_IL23.value <- 0.0008
-sigma_Th17.value <- 0.0008
-sigma_IL17.value <- 0.0008
-sigma_Gk.value <- 0.00023
+sigma_m.value <- 0.0023
+sigma_IL12.value <- 0.0023
+sigma_Th0_IL12.value <- 0.0023
+sigma_Th0_IL17.value <- 0.0023
+sigma_Th1.value <- 0.0023 #0.8
+sigma_IL2.value <- 0.0023
+sigma_IFNg.value <- 0.0023
+sigma_IFNgk.value <- 0.0023
+sigma_TNFa.value <- 0.0023
+sigma_d.value <- 0.0023
+sigma_IL23.value <- 0.0023
+sigma_Th17.value <- 0.0023
+sigma_IL17.value <- 0.0023
+sigma_Gk.value <- 0.0023
 
-parameter.list <- c( KTh0_IL17_IFNg = KTh0_IL17_IFNg.value,Kv_m = Kv_m.value, Kv_d = Kv_d.value, Kv_Gk = Kv_Gk.value, KTNFa_m = KTNFa_m.value, 
+parameter.list <- c(KTh0_IL17_IFNg = KTh0_IL17_IFNg.value, Kv_Gk = Kv_Gk.value, KTNFa_m = KTNFa_m.value, 
                     KIFNgk_m = KIFNgk_m.value,Km_IL12 = Km_IL12.value, KIL12_Th0 = KIL12_Th0.value,Km_Th0 = Km_Th0.value, 
                     KTh0_Th1 = KTh0_Th1.value, KTh0_Th17 = KTh0_Th17.value, KIL23_Th0 = KIL23_Th0.value,
                     KIL2_Th0 = KIL2_Th0.value, KTh1_IL2 = KTh1_IL2.value, KIFNgk_IFNg = KIFNgk_IFNg.value, 
@@ -119,7 +128,7 @@ parameter.list <- c( KTh0_IL17_IFNg = KTh0_IL17_IFNg.value,Kv_m = Kv_m.value, Kv
                     sigma_Th17 = sigma_Th17.value, sigma_IL17 = sigma_IL17.value, sigma_Gk = sigma_Gk.value,sigma_Th0_IL17 = sigma_Th0_IL17.value)
 
 # initial values
-Vaccine0 = 0.02
+Vaccine0 = 240
 Makrofag0 = 5
 IL120 = 0
 Th0_IL12_0 = 2
@@ -129,7 +138,7 @@ IL20 = 0
 IFNg0 = 0
 IFNgk0 = 0
 TNFa0 = 0
-Dendrit0 = .5
+Dendrit0 = 5
 IL230 = 0
 Th170 = 0
 IL170 = 0
@@ -146,22 +155,34 @@ time.points <- seq(0,2*365,by=1)
 output <- ode(y=initial.values,times = time.points,func = model, parms = parameter.list)
 
 # Plot the result 
-plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.02),xlim=c(0,10),ylab='Amount',xlab='Time (days)')
-plot(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,10),ylab='Amount',xlab='Time (days)')
-plot(IL12~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
-plot(Th0_IL12~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,10),ylim=c(0,4),ylab='Amount',xlab='Time (days)')
-plot(Th0_IL17~time,data=output,type='l',lwd=3,lty=2,col='black',xlim=c(0,10),ylim=c(0,4),ylab='Amount',xlab='Time (days)')
+
+# IL12 pathway
+plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,70),xlim=c(0,6),ylab='Amount',xlab='Time (days)')
+plot(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,80),ylab='Amount',xlab='Time (days)')
+plot(IL12~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,5),ylab='Amount',xlab='Time (days)')
+plot(Th0_IL12~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,4),ylab='Amount',xlab='Time (days)')
+plot(Th0_IL17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,4),ylab='Amount',xlab='Time (days)')
 plot(Th1~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
 plot(IL2~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.001),ylab='Amount',xlab='Time (days)')
 plot(IFNg~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.2),ylab='Amount',xlab='Time (days)')
-plot(IFNgk~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
+plot(IFNgk~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.002),ylab='Amount',xlab='Time (days)')
 plot(TNFa~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.6),ylab='Amount',xlab='Time (days)')
 
-plot(Dendrit~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,6),xlim=c(0,6),ylab='Amount',xlab='Time (days)')
-plot(IL23~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.2),ylab='Amount',xlab='Time (days)')
+# IL17 pathway
+plot(Dendrit~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,100),ylab='Amount',xlab='Time (days)')
+plot(IL23~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,5),ylab='Amount',xlab='Time (days)')
 plot(Th17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
-plot(IL17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.01),ylab='Amount',xlab='Time (days)')
-plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
+plot(IL17~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.001),ylab='Amount',xlab='Time (days)')
+plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.001),ylab='Amount',xlab='Time (days)')
+
+#plot(Kv_d~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,500),ylab='Amount',xlab='Time (days)')
+
+plot()
+
+
+
+
+
 
 # Herfra loades data
 DATA <- read.table("DataUdenHuller.csv", header=TRUE, sep=";", as.is=TRUE)
