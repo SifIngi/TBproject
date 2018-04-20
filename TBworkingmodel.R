@@ -248,23 +248,32 @@ for ( i in 1:N.iter){
   output <- ode(y=initial.values,times = time.points,func = model, parms = parameter.list)
 }
 
-m.res <- data.frame(KTh0_IL17_IFNg = KTh0_IL17_IFNg.list[i],Kv_m = Kv_m.list[i], Kv_d = Kv_d.list[i], Kv_Gk = Kv_Gk.list[i], KTNFa_m = KTNFa_m.list[i], 
+m.res1 <- data.frame(Kv_m = Kv_m.list[i], KTNFa_m = KTNFa_m.list[i], 
                     KIFNgk_m = KIFNgk_m.list[i],Km_IL12 = Km_IL12.list[i], KIL12_Th0 = KIL12_Th0.list[i],Km_Th0 = Km_Th0.list[i], 
-                    KTh0_Th1 = KTh0_Th1.list[i], KTh0_Th17 = KTh0_Th17.list[i], KIL23_Th0 = KIL23_Th0.list[i],
+                    KTh0_Th1 = KTh0_Th1.list[i], 
                     KIL2_Th0 = KIL2_Th0.list[i], KTh1_IL2 = KTh1_IL2.list[i], KIFNgk_IFNg = KIFNgk_IFNg.list[i], 
-                    KTh0_IL12_IFNg = KTh0_IL12_IFNg.list[i], KTh1_IFNg = KTh1_IFNg.list[i], KTh17_IFNg = KTh17_IFNg.list[i], 
-                    KIFNg_IFNgk = KIFNg_IFNgk.list[i], Km_TNFa = Km_TNFa.list[i], Kd_IL23 = Kd_IL23.list[i], 
-                    KTh17_IL17 = KTh17_IL17.list[i], KIL17_Gk = KIL17_Gk.list[i], sigma_m = sigma_m.list[i],
+                    KTh0_IL12_IFNg = KTh0_IL12_IFNg.list[i], KTh1_IFNg = KTh1_IFNg.list[i], 
+                    KIFNg_IFNgk = KIFNg_IFNgk.list[i], Km_TNFa = Km_TNFa.list[i],  
+                    sigma_m = sigma_m.list[i],
                     sigma_IL12 = sigma_IL12.list[i], sigma_Th0_IL12 = sigma_Th0_IL12.list[i], sigma_Th1 = sigma_Th1.list[i],
                     sigma_IL2 = sigma_IL2.list[i], sigma_IFNg = sigma_IFNg.list[i], sigma_IFNgk = sigma_IFNgk.list[i],
-                    sigma_TNFa = sigma_TNFa.list[i], sigma_d = sigma_d.list[i], sigma_IL23 = sigma_IL23.list[i],
-                    sigma_Th17 = sigma_Th17.list[i], sigma_IL17 = sigma_IL17.list[i], sigma_Gk = sigma_Gk.list[i],
-                    KM_TNFa = KM_TNFa.list[i], sigma_Th0_IL17 = sigma_Th0_IL17.list[i])
+                    sigma_TNFa = sigma_TNFa.list[i], KM_TNFa = KM_TNFa.list[i] )
+
+m.res2 <- data.frame(KTh0_IL17_IFNg = KTh0_IL17_IFNg.list[i], Kv_d = Kv_d.list[i], Kv_Gk = Kv_Gk.list[i],  
+                     KTh0_Th17 = KTh0_Th17.list[i], KIL23_Th0 = KIL23_Th0.list[i],
+                     KTh17_IFNg = KTh17_IFNg.list[i], 
+                     Kd_IL23 = Kd_IL23.list[i], 
+                     KTh17_IL17 = KTh17_IL17.list[i], KIL17_Gk = KIL17_Gk.list[i], 
+                     sigma_IFNg = sigma_IFNg.list[i], 
+                     sigma_d = sigma_d.list[i], sigma_IL23 = sigma_IL23.list[i],
+                     sigma_Th17 = sigma_Th17.list[i], sigma_IL17 = sigma_IL17.list[i], sigma_Gk = sigma_Gk.list[i],
+                     sigma_Th0_IL17 = sigma_Th0_IL17.list[i])
 
 
 # Scatterplots
-pairs(m.res)
 
+pairs(m.res1)
+pairs(m.res2)
 
 # PRCC
 
