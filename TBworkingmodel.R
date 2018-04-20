@@ -36,17 +36,45 @@ model = function (current_timepoint, state_values, parameters)
   with ( 
     as.list (parameters),     # variable names within parameters can be used 
     {
-      #Kv_m <- ifelse(Vaccine > 0.02, Kv_m.value, 0.00000001)
-      #Kv_d <- ifelse(Vaccine > 0.02, Kv_d.value, 2)
-      #Kv_Gk <- ifelse(Vaccine > 0, Kv_Gk.value, 0)
-      #Vaccine <- ifelse(Kv_d > 0, Vaccine,0)
+      
+      #if (Vaccine <0) {
+      #  Vaccine = 0  
+      #}
+      
+
+      
       Kv_m = 5*(250-Vaccine0)/((250-Vaccine0)+1)-(250-Vaccine0)*0.02
       Kv_d = 5*Vaccine0/(Vaccine0+1)-Vaccine0*0.02
+      
+      
+      Kv_m <- ifelse(Vaccine > 0, Kv_m, 0) # Så der ikke bliver trukket fra vaccine
+      Kv_d <- ifelse(Vaccine > 0, Kv_d, 0)
+      Kv_Gk <- ifelse(Vaccine > 0, Kv_Gk.value, 0)
+      
+
+      #Vaccine <- ifelse(Kv_d > 0, Vaccine,0)
+
       #Kv_m = 1
       #Kv_d = 1
       
       
       dVaccine = - Vaccine*Kv_m - Vaccine*Kv_d - Vaccine*Kv_Gk
+      #Vaccine[Vaccine<0] <- 0
+      
+     # Vaccine = ifelse(Vaccine<0,0,Vaccine)
+      
+      
+      # if (Vaccine < 0) {
+      #   Vaccine = 0
+      # } else {
+      #   dVaccine = - Vaccine*Kv_m - Vaccine*Kv_d - Vaccine*Kv_Gk
+      # }
+      
+      
+
+      #apply(dVaccine, 2,- Vaccine*Kv_m - Vaccine*Kv_d - Vaccine*Kv_Gk {ifelse(Vaccine < 0, 0, Vaccine)}) 
+     
+      
       dMakrofag = Vaccine*(Kv_m) + TNFa * KTNFa_m + IFNgk * KIFNgk_m - Makrofag*sigma_m
       dIL12 = Makrofag * Km_IL12 - IL12 * KIL12_Th0 - IL12*sigma_IL12
       dTh0_IL12 = Makrofag * Km_Th0 + IL12 * KIL12_Th0 - Th0_IL12 * KTh0_Th1 + IL2 * KIL2_Th0  - Th0_IL12*sigma_Th0_IL12
@@ -61,6 +89,8 @@ model = function (current_timepoint, state_values, parameters)
       dTh17 = Th0_IL17 * KTh0_Th17 - Th17*sigma_Th17
       dIL17 = Th17 * KTh17_IL17 - IL17*sigma_IL17
       dGranulocytKnoglemarv =  Vaccine*Kv_Gk + IL17 * KIL17_Gk - GranulotcytKnoglemarv*sigma_Gk 
+      
+     
 
 
 
@@ -76,6 +106,7 @@ model = function (current_timepoint, state_values, parameters)
 }
 
 # parameters
+
 KTh0_IL17_IFNg.value <- 0.00009
 KTh0_IL12_IFNg.value <- 0.00009
 #Kv_m.value <- 0.02
@@ -89,12 +120,12 @@ Km_Th0.value <- 0.00009
 KTh0_Th1.value <- 0.00009 
 KTh0_Th17.value <- 0.00009
 KIL23_Th0.value <- 0.00009 
-KIL2_Th0.value <- 0.00009 
+KIL2_Th0.value <- 0.009 
 KTh1_IL2.value <- 0.00009
 KIFNgk_IFNg.value <- 0.00009 
 KTh0_IFNg.value <- .00009 
 KTh1_IFNg.value <- .00009
-KTh17_IFNg.value <- .00009
+KTh17_IFNg.value <- .009
 KIFNg_IFNgk.value <- .00009
 Km_TNFa.value <- .00009
 Kd_IL23.value <- 0.00009
@@ -128,7 +159,7 @@ parameter.list <- c(KTh0_IL17_IFNg = KTh0_IL17_IFNg.value, Kv_Gk = Kv_Gk.value, 
                     sigma_Th17 = sigma_Th17.value, sigma_IL17 = sigma_IL17.value, sigma_Gk = sigma_Gk.value,sigma_Th0_IL17 = sigma_Th0_IL17.value)
 
 # initial values
-Vaccine0 = 240
+Vaccine0 = 200
 Makrofag0 = 5
 IL120 = 0
 Th0_IL12_0 = 2
@@ -179,7 +210,22 @@ plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',yli
 
 plot()
 
+# Undersøger nu dendritter mod makrofager, samt infgamma for doserne 0.2,50,100,200,250
 
+SimulatedDataDose100 <- as.data.frame(output)
+DendritDose100 <- SimulatedDataDose100$Dendrit
+IFNgDose100 <- SimulatedDataDose100$IFNg
+MakrofagDose100 <- SimulatedDataDose100$Makrofag
+Time <- SimulatedDataDose100$time
+
+Data100 <- matrix(c(Time,DendritDose100,IFNgDose100,MakrofagDose100),nrow=length(MakrofagDose100))
+write.csv(Data100,file = "Data200")
+
+#SimulatedDataDose50 <- as.data.frame(output)
+#DendritDose50 <- SimulatedDataDose50$Dendrit
+#IFNgDose50 <- SimulatedDataDose50$IFNg
+#MakrofagDose50 <- SimulatedDataDose50$Makrofag
+#DendritDose50 <- DendritDose50
 
 
 
