@@ -145,40 +145,40 @@ output <- ode(y=initial.values,times = time.points,func = model, parms = paramet
 graphics.off()
 
 # Plot af vaccine, makrofag og dendrit
-plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,150),xlim=c(0,5),ylab='Amount',xlab='Time (days)')
-lines(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='red',ylim=c(0,150),xlim=c(0,5),ylab='Amount',xlab='Time (days)')
-lines(Dendrit~time,data=output,type='l',lwd=3,lty=2,col='blue',ylim=c(0,150),xlim=c(0,5),ylab='Amount',xlab='Time (days)')
+plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,150),xlim=c(0,5),ylab='Mængde',xlab='Tid (dage)')
+lines(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='red')
+lines(Dendrit~time,data=output,type='l',lwd=3,lty=2,col='blue')
 legend(3, 150, legend=c("Vaccine", "Makrofag","Dendrit"),
        col=c("black", "red","blue"), lty=1:4, cex=0.8)
-title("Dose = 150")
+title("Dosis = 150")
 
 
 # Plot af IL12 pathway
-plot(IL12~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,5),xlim=c(0,2*365),ylab='Amount',xlab='Time (days)')
-lines(Th0_IL12~time,data=output,type='l',lwd=3,lty=2,col='blue',ylim=c(0,2),xlim=c(0,2*365),ylab='Amount',xlab='Time (days)')
-lines(Th1~time,data=output,type='l',lwd=3,lty=2,col='red',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
-lines(IL2~time,data=output,type='l',lwd=3,lty=2,col='green',ylim=c(0,0.0005),ylab='Amount',xlab='Time (days)')
-lines(TNFa~time,data=output,type='l',lwd=3,lty=2,col='orange',ylim=c(0,0.6),ylab='Amount',xlab='Time (days)')
+plot(IL12~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,5),xlim=c(0,2*365),ylab='Mængde',xlab='Tid (dage)')
+lines(Th0_IL12~time,data=output,type='l',lwd=3,lty=2,col='blue')
+lines(Th1~time,data=output,type='l',lwd=3,lty=2,col='red')
+lines(IL2~time,data=output,type='l',lwd=3,lty=2,col='green')
+lines(TNFa~time,data=output,type='l',lwd=3,lty=2,col='orange')
 legend(400, 5, legend=c("IL12", "Th0 i IL12 pathway","Th1","IL2","TNF-alpha"),
        col=c("black", "blue","red","green","orange"), lty=1:4, cex=0.8)
-title("Dose = 150")
+title("Dosis = 150")
 
 
-plot(IFNg~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.3),ylab='Amount',xlab='Time (days)')
-lines(IFNgk~time,data=output,type='l',lwd=3,lty=2,col='blue',ylim=c(0,0.3),ylab='Amount',xlab='Time (days)')
+plot(IFNg~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,0.3),ylab='Mængde',xlab='Tid (dage)')
+lines(IFNgk~time,data=output,type='l',lwd=3,lty=2,col='blue')
 legend(400, 0.30, legend=c("IFNgamma", "IFNgammakompleks"),
        col=c("black", "blue"), lty=1:4, cex=0.8)
-title("Dose = 150")
+title("Dosis = 150")
 
 
 # Plot af IL17
-plot(IL23~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,3),ylab='Amount',xlab='Time (days)')
-lines(Th0_IL17~time,data=output,type='l',lwd=3,lty=2,col='blue',ylim=c(0,3),ylab='Amount',xlab='Time (days)')
-lines(Th17~time,data=output,type='l',lwd=3,lty=2,col='red',ylim=c(0,0.1),ylab='Amount',xlab='Time (days)')
-lines(IL17~time,data=output,type='l',lwd=3,lty=2,col='green',ylim=c(0,0.001),ylab='Amount',xlab='Time (days)')
-lines(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='orange',ylim=c(0,0.001),ylab='Amount',xlab='Time (days)')
+plot(IL23~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,3),ylab='Mængde',xlab='Time (dage)')
+lines(Th0_IL17~time,data=output,type='l',lwd=3,lty=2,col='blue',ylim=c(0,3))
+lines(Th17~time,data=output,type='l',lwd=3,lty=2,col='red',ylim=c(0,0.1))
+lines(IL17~time,data=output,type='l',lwd=3,lty=2,col='green',ylim=c(0,0.001))
+lines(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='orange')
 legend(350, 3, legend=c("IL23", "Th0 i IL17 pathway","Th17","IL17","Granulocyt i knoglemarv"),
        col=c("black", "blue","red","green","orange"), lty=1:4, cex=0.8)
-title("Dose = 150")
+title("Dosis = 150")
 
 
