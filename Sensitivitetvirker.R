@@ -35,8 +35,8 @@ model = function (current_timepoint, state_values, parameters)
   with ( 
     as.list (parameters),     # variable names within parameters can be used 
     {
-      Kv_m <- ifelse(Vaccine0 > 0.02, Kv_m.value, 0.01)
-      Kv_d <- ifelse(Vaccine0 > 0.02, Kv_d.value, 0.02)
+      Kv_m <- 5*(250-Vaccine0)/((250-Vaccine0)+1)-(250-Vaccine0)*0.02
+      Kv_d <- 5*Vaccine0/(Vaccine0+1)-Vaccine0*0.02
       
       dVaccine = - (Vaccine*Kv_m) - (Vaccine*Kv_d) - Vaccine*Kv_Gk
       dMakrofag = (Vaccine*Kv_m) + TNFa * KTNFa_m + IFNgk * KIFNgk_m/(KM_TNFa+IFNgk) - Makrofag*sigma_m
@@ -194,8 +194,6 @@ plot(GranulotcytKnoglemarv~time,data=output,type='l',lwd=3,lty=2,col='black',yli
 N.iter <- 100
 KTh0_IL17_IFNg.list <- runif(N.iter,min=0.7,max=1.2)
 KTh0_IL12_IFNg.list <- runif(N.iter,min=0.7,max=1.2)
-Kv_m.list <- runif(N.iter,min=0.01,max=0.05)
-Kv_d.list <- runif(N.iter,min=0.001,max=0.04) 
 Kv_Gk.list <- runif(N.iter,min=0.005,max=0.05) 
 KTNFa_m.list <- runif(N.iter,min=0.0005,max=0.004) 
 KIFNgk_m.list <- runif(N.iter,min=50,max=150)
@@ -231,12 +229,24 @@ sigma_Th17.list <- runif(N.iter,min=0.06,max=0.1)
 sigma_IL17.list <- runif(N.iter,min=0.06,max=0.1)
 sigma_Gk.list <- runif(N.iter,min=0.003,max=0.043)
 KM_TNFa.list <- runif(N.iter,min=5,max=90) 
+
 resultsIL17 <- numeric(N.iter)
 resultsIL17.t <-  numeric(N.iter) 
 
+resultsIFN <- numeric(N.iter)
+resultsIFN.t <-  numeric(N.iter) 
+
+Vaccine0.list <- runif(N.iter,min=0.02,max=250) 
+
+resultsDC <- numeric(N.iter)
+resultsDC.t <-  numeric(N.iter) 
+
+resultsMC <- numeric(N.iter)
+resultsMC.t <-  numeric(N.iter) 
+
 for ( i in 1:N.iter){
   # simulate the epidemic
-  parameter.list <- c(KTh0_IL17_IFNg = KTh0_IL17_IFNg.list[i],Kv_m = Kv_m.list[i], Kv_d = Kv_d.list[i], Kv_Gk = Kv_Gk.list[i], KTNFa_m = KTNFa_m.list[i], 
+  parameter.list <- c(KTh0_IL17_IFNg = KTh0_IL17_IFNg.list[i], Kv_Gk = Kv_Gk.list[i], KTNFa_m = KTNFa_m.list[i], 
                       KIFNgk_m = KIFNgk_m.list[i],Km_IL12 = Km_IL12.list[i], KIL12_Th0 = KIL12_Th0.list[i],Km_Th0 = Km_Th0.list[i], 
                       KTh0_Th1 = KTh0_Th1.list[i], KTh0_Th17 = KTh0_Th17.list[i], KIL23_Th0 = KIL23_Th0.list[i],
                       KIL2_Th0 = KIL2_Th0.list[i], KTh1_IL2 = KTh1_IL2.list[i], KIFNgk_IFNg = KIFNgk_IFNg.list[i], 
@@ -248,10 +258,51 @@ for ( i in 1:N.iter){
                       sigma_TNFa = sigma_TNFa.list[i], sigma_d = sigma_d.list[i], sigma_IL23 = sigma_IL23.list[i],
                       sigma_Th17 = sigma_Th17.list[i], sigma_IL17 = sigma_IL17.list[i], sigma_Gk = sigma_Gk.list[i],
                       KM_TNFa = KM_TNFa.list[i], sigma_Th0_IL17 = sigma_Th0_IL17.list[i])
+  
+  initial.values <- c(Vaccine = Vaccine0.list[i], Makrofag = Makrofag0, IL12 = IL120, Th0_IL12 = Th0_IL12_0, Th0_IL17 = Th0_IL17_0, Th1 = Th10, IL2 = IL20, IFNg = IFNg0, 
+                      IFNgk = IFNgk0, TNFa = TNFa0, Dendrit = Dendrit0, IL23 = IL230, Th17 = Th170, IL17 = IL170, 
+                      GranulotcytKnoglemarv = GranulotcytKnoglemarv0)
+  
   output <- ode(y=initial.values,times = time.points,func = model, parms = parameter.list)
   
   resultsIL17[i] <-  max(output[,'IL17'])
   resultsIL17.t[i] <- output[which(output[,'IL17'] == resultsIL17[i]),'time']
+  
+  resultsDC[i] <- max(output[,'Dendrit'])
+  resultsDC.t[i] <- output[which(output[,'Dendrit'] == resultsDC[i]),'time']
+  
+  resultsMC[i] <- max(output[,'Makrofag'])
+  resultsMC.t[i] <- output[which(output[,'Makrofag'] == resultsMC[i]),'time']
+  
+  # resultsIFN[i] <-  max(output[,'IFNg'])
+  # resultsKM.IFN[i] <- output[which(output[,'IFN'] == resultsIL17[i]),'time']
+  
+  
 }
+library(epiR)
 
-plot(resultsIL17.t,resultsIL17)
+resultatIL17 <- data.frame(sigma_IL17 = sigma_IL17.list,
+                           KTh17_IL17 = KTh17_IL17.list,resultsIL17, resultsIL17.t)
+pairs(resultatIL17)
+KorrelationIL17ogSigma <- epi.prcc(resultatIL17[,c(1,2,3)])
+
+resultatDCMC <- data.frame(resultsDC,Vaccine = Vaccine0.list,resultsMC,KIFNgk_m = KIFNgk_m.list, 
+                           KTNFa_m = KTNFa_m.list, Km_IL12 = Km_IL12.list,
+                           Km_Th0 = Km_Th0.list,Km_TNFa = Km_TNFa.list, Kd_IL23 = Kd_IL23.list)
+pairs(resultatDCMC)
+KorrelationMCogDC <- epi.prcc(resultatDCMC[,c(1,2,3,4,5,6,7,8)])
+#print(ouput)
+
+
+
+
+
+
+
+
+
+# F1 for hjælp 
+KorrelationIL17ogSigma <- epi.prcc(resultatIL17[,c(1,2,3)]) # beta/gamma er positiv/negativ korreleret med i.max
+
+
+
