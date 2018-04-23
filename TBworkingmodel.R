@@ -127,7 +127,7 @@ parameter.list <- c(KTh0_IL17_IFNg = KTh0_IL17_IFNg.value, Kv_Gk = Kv_Gk.value, 
                     sigma_Th17 = sigma_Th17.value, sigma_IL17 = sigma_IL17.value, sigma_Gk = sigma_Gk.value,sigma_Th0_IL17 = sigma_Th0_IL17.value)
 
 # initial values
-Vaccine0 = 5
+Vaccine0 = 150
 Makrofag0 = 5
 IL120 = 0
 Th0_IL12_0 = 2
