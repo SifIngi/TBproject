@@ -1,4 +1,4 @@
-# TB model in R
+# TB model
 
 rm(list=ls())
 
@@ -233,6 +233,9 @@ KM_TNFa.list <- runif(N.iter,min=5,max=90)
 resultsIL17 <- numeric(N.iter)
 resultsIL17.t <-  numeric(N.iter) 
 
+resultsTh17 <- numeric(N.iter)
+resultsTh17.t <-  numeric(N.iter) 
+
 resultsIFN <- numeric(N.iter)
 resultsIFN.t <-  numeric(N.iter) 
 
@@ -268,11 +271,14 @@ for ( i in 1:N.iter){
   resultsIL17[i] <-  max(output[,'IL17'])
   resultsIL17.t[i] <- output[which(output[,'IL17'] == resultsIL17[i]),'time']
   
+  resultsTh17[i] <-  max(output[,'Th17'])
+  resultsTh17.t[i] <- output[which(output[,'Th17'] == resultsTh17[i]),'time']
+  
   resultsDC[i] <- max(output[,'Dendrit'])
   resultsDC.t[i] <- output[which(output[,'Dendrit'] == resultsDC[i]),'time']
   
-  resultsMC[i] <- max(output[,'Makrofag'])
-  resultsMC.t[i] <- output[which(output[,'Makrofag'] == resultsMC[i]),'time']
+  # resultsMC[i] <- max(output[,'Makrofag'])
+  # resultsMC.t[i] <- output[which(output[,'Makrofag'] == resultsMC[i]),'time']
   
   # resultsIFN[i] <-  max(output[,'IFNg'])
   # resultsKM.IFN[i] <- output[which(output[,'IFN'] == resultsIL17[i]),'time']
@@ -281,10 +287,19 @@ for ( i in 1:N.iter){
 }
 library(epiR)
 
-resultatIL17 <- data.frame(sigma_IL17 = sigma_IL17.list,
-                           KTh17_IL17 = KTh17_IL17.list,resultsIL17, resultsIL17.t)
-pairs(resultatIL17)
-KorrelationIL17ogSigma <- epi.prcc(resultatIL17[,c(1,2,3)])
+resultatILTh17 <- data.frame(sigma_IL17 = sigma_IL17.list,
+                           KTh17_IL17 = KTh17_IL17.list,KTh0_Th17 = KTh0_Th17.list,KIL17_Gk = KIL17_Gk.list,
+                           sigma_Th17 = sigma_Th17.list,
+                           resultsTh17, resultsTh17.t, resultsIL17, resultsIL17.t)
+
+
+pairs(resultatILTh17)
+KorrelationIL17ogSigma <- epi.prcc(resultatILTh17[,c(1,2,3,4,5,6,7,8,9)])
+
+
+
+
+
 
 resultatDCMC <- data.frame(resultsDC,Vaccine = Vaccine0.list,resultsMC,KIFNgk_m = KIFNgk_m.list, 
                            KTNFa_m = KTNFa_m.list, Km_IL12 = Km_IL12.list,
