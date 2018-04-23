@@ -148,7 +148,7 @@ initial.values <- c(Vaccine = Vaccine0, Makrofag = Makrofag0, IL12 = IL120, Th0_
                     GranulotcytKnoglemarv = GranulotcytKnoglemarv0)
 
 # Output timepoints
-time.points <- seq(0,2*365,by=1)
+time.points <- seq(0,2*365,by=0.01)
 
 # simulate the epidemic
 output <- ode(y=initial.values,times = time.points,func = model, parms = parameter.list)
@@ -161,6 +161,7 @@ output <- ode(y=initial.values,times = time.points,func = model, parms = paramet
 
 #options("scipen"=100, "digits"=4) 
 
+graphics.off()
 # Plot af vaccine, makrofag og dendrit
 plot(Vaccine~time,data=output,type='l',lwd=3,lty=2,col='black',ylim=c(0,150),xlim=c(0,5),ylab='Amount',xlab='Time (days)')
 lines(Makrofag~time,data=output,type='l',lwd=3,lty=2,col='red',ylim=c(0,150),xlim=c(0,5),ylab='Amount',xlab='Time (days)')
@@ -198,7 +199,8 @@ legend(350, 3, legend=c("IL23", "Th0 i IL17 pathway","Th17","IL17","Granulocyt i
        col=c("black", "blue","red","green","orange"), lty=1:4, cex=0.8)
 title("Dose = 150")
 
-
+SimulatedDataDose100 <- as.data.frame(output)
+Vaccinetest <- SimulatedDataDose100$Vaccine
 
 # Undersøger nu dendritter mod makrofager, samt infgamma for doserne 0.2,50,100,200,250
 
